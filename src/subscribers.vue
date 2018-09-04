@@ -113,9 +113,9 @@
 import Vue from 'vue'
 import axios from 'axios'
 import { EventBus } from './event-bus.js'
-import App from './App.vue'
-import App2 from './App2.vue'
-import App3 from './App3.vue'
+import login from './Login.vue'
+import cells from './cells.vue'
+import subscribers from './subscribers.vue'
 import ws from './websocket.js'
 
 
@@ -137,7 +137,7 @@ data() {
   methods: {
   cells: function() {
   new Vue({
-  render: h => h(App2)
+  render: h => h(cells)
   }).$mount('#app3')
   EventBus.$emit('data', this.input.data);
   },
@@ -147,7 +147,7 @@ data() {
   logout: function() {
   window.localStorage.setItem('test', '');
     new Vue({
-      render: h => h(App)
+      render: h => h(login)
     }).$mount('#app3')
   },
   Update: function(el) {
@@ -170,7 +170,7 @@ data() {
           self.input.dataUpdate = JSON.parse(m.data).body;
           self.input.data2[parseInt(self.input.dataUpdate.id)-1] = self.input.dataUpdate;
           new Vue({
-          render: h => h(App3)
+          render: h => h(subscribers)
           }).$mount('#app3')
           EventBus.$emit('data', self.input.data);
 

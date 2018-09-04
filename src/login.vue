@@ -17,7 +17,7 @@
   </div>
 </template>
 <script>
-import App2 from './App2.vue'
+import cells from './cells.vue'
 import { EventBus } from './event-bus.js'
 import Vue from 'vue'
 import axios from 'axios'
@@ -50,7 +50,7 @@ export default {
 
 
          new Vue({
-         render: h => h(App2)
+         render: h => h(cells)
          }).$mount('#app')
          EventBus.$emit('data', this.input.data);
 
