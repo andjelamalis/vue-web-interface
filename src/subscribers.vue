@@ -113,7 +113,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import { EventBus } from './event-bus.js'
-import login from './Login.vue'
+import login from './login.vue'
 import cells from './cells.vue'
 import subscribers from './subscribers.vue'
 import ws from './websocket.js'
