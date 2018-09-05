@@ -132,7 +132,6 @@ data() {
     axios.put('/api/gui/cell/'+el.id,JSON.stringify({"accept_mode":el.accept_mode}));
   },
   OnOff: function(el) {
-  console.log(el.required_status);
     axios.post('/api/gui/cell/'+el.id+'/power/'+ (el.required_status === 'on' ? 'off/' : 'on/'));
   },
   cells: function() {
@@ -158,7 +157,7 @@ data() {
 
   },
   mounted() {
-ws.$on('message', mes => {
+  ws.$on('message', mes => {
   this.input.message = mes
    if (active.cells_active == 'yes') {
   if (mes.type == 'cell_updated') {
