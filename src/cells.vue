@@ -104,6 +104,7 @@ import login from './login.vue'
 import cells from './cells.vue'
 import subscribers from './subscribers.vue'
 import ws from './websocket'
+import active from './actives.js'
 
 
 export default {
@@ -147,7 +148,8 @@ data() {
 
   },
   subscribers: function() {
-
+  active.cells_active = 'no';
+  active.subs_active = 'yes';
   new Vue({
   render: h => h(subscribers)
   }).$mount('#app2')
@@ -156,21 +158,25 @@ data() {
 
   },
   mounted() {
+ws.$on('message', mes => {
+  this.input.message = mes
+   if (active.cells_active == 'yes') {
+  if (mes.type == 'cell_updated') {
 
-  ws.$on('message', mes => {
-    this.input.message = mes
-
-    if (mes.type == 'cell_updated') {
-
-    this.input.data[parseInt(mes.body.id)-1] = mes.body;
-    new Vue({
-    render: h => h(cells)
-    }).$mount('#app2')
+  this.input.data[parseInt(mes.body.id)-1] = mes.body;
+  new Vue({
+  render: h => h(cells)
+  }).$mount('#app2');
 
 
-    }
+  }
+}
+})
 
-  })
+
+
+
+
 
   },
   created() {
