@@ -141,46 +141,46 @@ data() {
     window.localStorage.setItem('test', '');
     new Vue({
       render: h => h(login)
-    }).$mount('#app2')
+    }).$mount('#app2');
+
+
 
   },
   subscribers: function() {
+
   new Vue({
   render: h => h(subscribers)
   }).$mount('#app2')
-  EventBus.$emit('data', this.input.data);
+
   }
 
   },
   mounted() {
-  var self = this;
 
-  console.log(self.input.data);
+  ws.$on('message', mes => {
+    this.input.message = mes
 
-      ws.onmessage = function(m) {
-      self.input.message = JSON.parse(m.data).type;
-      if (self.input.message == 'cell_updated') {
+    if (mes.type == 'cell_updated') {
 
-          self.input.dataUpdate = JSON.parse(m.data).body;
-          self.input.data[parseInt(self.input.dataUpdate.id)-1] = self.input.dataUpdate;
-
-          new Vue({
-          render: h => h(cells)
-          }).$mount('#app2')
-          EventBus.$emit('data', self.input.data);
-
-      }
+    this.input.data[parseInt(mes.body.id)-1] = mes.body;
+    new Vue({
+    render: h => h(cells)
+    }).$mount('#app2')
 
 
-  }
+    }
+
+  })
+
   },
   created() {
-  EventBus.$on('data', da => {
-    this.input.data = da
-    console.log(this.input.data);
+  axios.get('/api/gui/cell').then(response => {
+     this.input.data = response.data;
   });
 
-  }
+  },
+
+
   }
 
 

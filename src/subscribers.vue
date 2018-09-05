@@ -136,10 +136,12 @@ data() {
   },
   methods: {
   cells: function() {
+  
   new Vue({
   render: h => h(cells)
   }).$mount('#app3')
-  EventBus.$emit('data', this.input.data);
+
+
   },
   subscribers: function() {
 
@@ -163,29 +165,31 @@ data() {
   },
   },
   mounted() {
-  var self = this;
-        ws.onmessage = function(m) {
-          self.input.message = JSON.parse(m.data).type;
-          if (self.input.message == 'subscriber_updated') {
-          self.input.dataUpdate = JSON.parse(m.data).body;
-          self.input.data2[parseInt(self.input.dataUpdate.id)-1] = self.input.dataUpdate;
-          new Vue({
-          render: h => h(subscribers)
-          }).$mount('#app3')
-          EventBus.$emit('data', self.input.data);
 
-          }
+  ws.$on('message', mes => {
+
+    if (mes.type == 'subscriber_updated') {
+
+    this.input.data[parseInt(mes.body.id)-1] = mes.body;
+
+    new Vue({
+    render: h => h(subscribers)
+    }).$mount('#app3')
+
     }
+
+  });
+
   },
   created() {
   axios.get('/api/gui/subscriber').then(response => {
      this.input.data2 = response.data;
      });
-     EventBus.$on('data', da => {
-       this.input.data = da
-       });
+
+
+  },
   }
-  }
+
 </script>
 
 <style>

@@ -52,7 +52,6 @@ export default {
          new Vue({
          render: h => h(cells)
          }).$mount('#app')
-         EventBus.$emit('data', this.input.data);
 
     })
     .catch(error => {
