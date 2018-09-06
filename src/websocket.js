@@ -12,6 +12,22 @@ const emitter = new vue({
 })
 
 ws.onmessage =  function(m) {
+/*  if (m.type == 'cell_updated') {
+
+  }
+  else if (m.type == 'subscriber_updated') {
+
+  }
+
+  else if (m.type == 'subscriber_inserted') {
+
+
+  }
+  else if (m.type == 'subscriber_deleted') {
+
+
+  }
+*/
     emitter.$emit('message', JSON.parse(m.data));
   }
 

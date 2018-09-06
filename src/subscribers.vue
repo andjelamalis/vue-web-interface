@@ -14,65 +14,11 @@
   <br>
   <table>
     <tr>
-      <th> <p> id </p></th>
-      <th> imsi </th>
-      <th> imei </th>
-      <th> number </th>
-      <th> addition_time </th>
-      <th> last_update_time </th>
-      <th> is_available </th>
-      <th> cell_id </th>
-      <th> person_id </th>
-      <th> is_external_call_allowed </th>
-      <th> is_external_sms_allowed </th>
-      <th> is_internal_call_allowed </th>
-      <th> is_internal_sms_allowed </th>
-      <th> rrlp_location </th>
-      <th> rrlp_last_request_time </th>
-      <th> rrlp_error_code </th>
-      <th> rrlp_appraisal </th>
-      <th> rrlp_status </th>
-      <th> manufacturer </th>
-      <th> model </th>
-      <th> network </th>
-      <th> country </th>
-      <th> cell_name </th>
-      <th> arfcn </th>
-      <th> standard </th>
-      <th> uplink </th>
+    <th  v-for="(columns, j) in this.input.data2[0]" v-bind:key="j"> <p>{{j}} </p></th>
     </tr>
-
     <tr  v-for="(elements, i) in this.input.data2" v-bind:key="i">
-    <td> <p> {{elements.id}} </p></td>
-    <td> {{elements.imsi}} </td>
-    <td> {{elements.imei}} </td>
-    <td> {{elements.number}} </td>
-    <td> {{elements.addition_time}} </td>
-    <td> {{elements.last_update_time}} </td>
-    <td> {{elements.is_available}} </td>
-    <td> {{elements.cell_id}} </td>
-    <td> {{elements.person_id}} </td>
-    <td> {{elements.is_external_call_allowed}} </td>
-    <td> {{elements.is_external_sms_allowed}} </td>
-    <td> {{elements.is_internal_call_allowed}} </td>
-    <td> {{elements.is_internal_sms_allowed}} </td>
-    <td> {{elements.rrlp_location}} </td>
-    <td> {{elements.rrlp_last_request_time}} </td>
-    <td> {{elements.rrlp_error_code}} </td>
-    <td> {{elements.rrlp_appraisal}} </td>
-    <td> {{elements.rrlp_status}} </td>
-    <td> {{elements.manufacturer}} </td>
-    <td> {{elements.model}} </td>
-    <td> {{elements.network}} </td>
-    <td> {{elements.country}} </td>
-    <td> {{elements.cell_name}} </td>
-    <td> {{elements.arfcn}} </td>
-    <td> {{elements.tandard}} </td>
-    <td> {{elements.uplink}} </td>
+    <td  v-for="(columns, j) in elements" v-bind:key="j"> <p>{{columns}} </p></td>
     </tr>
-
-
-
 </table>
 
 <br>

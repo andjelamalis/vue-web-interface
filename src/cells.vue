@@ -13,36 +13,11 @@
   <br>
   <br>
   <table>
-    <tr>
-      <th> <p> id </p></th>
-      <th> accept_mode </th>
-      <th> cell_profile_id </th>
-      <th> channel_number </th>
-      <th> error_reason </th>
-      <th> ip </th>
-      <th> min_attenuation </th>
-      <th> name </th>
-      <th> power </th>
-      <th> power_type </th>
-      <th> required_status </th>
-      <th> status </th>
-    </tr>
-
+  <tr>
+  <th  v-for="(columns, j) in this.input.data[0]" v-bind:key="j"> <p>{{j}} </p></th>
     <tr  v-for="(elements, i) in this.input.data" v-bind:key="i">
-    <td> <p>{{elements.id}} </p></td>
-    <td> {{elements.accept_mode}} </td>
-    <td> {{elements.cell_profile_id}} </td>
-    <td> {{elements.channel_number}} </td>
-    <td> {{elements.error_reason}} </td>
-    <td> {{elements.ip}} </td>
-    <td> {{elements.min_attenuation}} </td>
-    <td> {{elements.name}} </td>
-    <td> {{elements.power}} </td>
-    <td> {{elements.power_type}} </td>
-    <td> {{elements.required_status}}</td>
-    <td> {{elements.status}} </td>
+    <td  v-for="(columns, j) in elements" v-bind:key="j"> <p>{{columns}} </p></td>
     </tr>
-
   </table>
 
   <br>
@@ -207,7 +182,7 @@ data() {
   }
 
 }
-this.$forceUpdate();
+
 }
 })
 
