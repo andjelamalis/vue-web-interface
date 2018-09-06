@@ -125,12 +125,11 @@ data() {
   },
   methods: {
   update: function(el) {
-    axios.put('/api/gui/cell/'+el.id,JSON.stringify({"cell_profile_id":parseInt(el.cell_profile_id)}));
-    axios.put('/api/gui/cell/'+el.id,JSON.stringify({"channel_number":parseInt(el.channel_number)}));
-    axios.put('/api/gui/cell/'+el.id,JSON.stringify({"min_attenuation":parseInt(el.min_attenuation)}));
-    axios.put('/api/gui/cell/'+el.id,JSON.stringify({"power":parseInt(el.power)}));
-    axios.put('/api/gui/cell/'+el.id,JSON.stringify({"power_type":el.power_type}));
-    axios.put('/api/gui/cell/'+el.id,JSON.stringify({"accept_mode":el.accept_mode}));
+
+
+  axios.put('/api/gui/cell/'+el.id,JSON.stringify({"el.cell_profile_id":parseInt(el.channel_number), "channel_number":parseInt(el.channel_number), "min_attenuation":parseInt(el.min_attenuation), "power":parseInt(el.power), "power_type":el.power_type, "accept_mode":el.accept_mode}));
+
+
   },
   OnOff: function(el) {
     axios.post('/api/gui/cell/'+el.id+'/power/'+ (el.required_status === 'on' ? 'off/' : 'on/'));

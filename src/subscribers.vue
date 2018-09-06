@@ -159,16 +159,8 @@ data() {
     }).$mount('#app3')
   },
   Update: function(el) {
-  
-    axios.put('/api/gui/subscriber/'+el.id,JSON.stringify({"imsi":el.imsi}));
-    axios.put('/api/gui/subscriber/'+el.id,JSON.stringify({"imei":el.imei}));
-    axios.put('/api/gui/subscriber/'+el.id,JSON.stringify({"number":el.number}));
-    axios.put('/api/gui/subscriber/'+el.id,JSON.stringify({"person_id":el.person_id}));
-    axios.put('/api/gui/subscriber/'+el.id,JSON.stringify({"is_external_call_allowed":el.is_external_call_allowed}));
-    axios.put('/api/gui/subscriber/'+el.id,JSON.stringify({"is_external_sms_allowed":el.is_external_sms_allowed}));
-    axios.put('/api/gui/subscriber/'+el.id,JSON.stringify({"is_internal_call_allowed":el.is_internal_call_allowed}));
-    axios.put('/api/gui/subscriber/'+el.id,JSON.stringify({"is_internal_sms_allowed":el.is_internal_sms_allowed}));
 
+    axios.put('/api/gui/subscriber/'+el.id,JSON.stringify({"imsi":el.imsi, "imei":el.imei, "number":el.number, "person_id":el.person_id, "is_external_call_allowed":el.is_external_call_allowed, "is_external_sms_allowed":el.is_external_sms_allowed, "is_internal_call_allowed":el.is_internal_call_allowed, "is_internal_sms_allowed":el.is_internal_sms_allowed}));
 
   },
   },
