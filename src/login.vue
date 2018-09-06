@@ -34,6 +34,7 @@ export default {
       user: '',
       pass: '',
       data: [],
+      data2: [],
       ws: ''
       }
     }
@@ -48,10 +49,11 @@ export default {
          const t = JSON.stringify(response.headers);
          window.localStorage.setItem('test', t);
 
-
          new Vue({
          render: h => h(cells)
          }).$mount('#app')
+         EventBus.$emit('data', this.input.data);
+         EventBus.$emit('data2', this.input.data2);
 
     })
     .catch(error => {
@@ -61,6 +63,10 @@ export default {
       axios.get('/api/gui/cell').then(response => {
          this.input.data = response.data;
     });
+    axios.get('/api/gui/subscriber').then(response => {
+       this.input.data2 = response.data;
+       });
+
   }
   }
   }

@@ -141,10 +141,12 @@ data() {
   cells: function() {
   active.cells_active = 'yes';
   active.subs_active = 'no';
+
   new Vue({
   render: h => h(cells)
   }).$mount('#app3')
-
+  EventBus.$emit('data', this.input.data);
+  EventBus.$emit('data2', this.input.data2);
 
   },
   subscribers: function() {
@@ -157,6 +159,7 @@ data() {
     }).$mount('#app3')
   },
   Update: function(el) {
+  
     axios.put('/api/gui/subscriber/'+el.id,JSON.stringify({"imsi":el.imsi}));
     axios.put('/api/gui/subscriber/'+el.id,JSON.stringify({"imei":el.imei}));
     axios.put('/api/gui/subscriber/'+el.id,JSON.stringify({"number":el.number}));
@@ -166,6 +169,7 @@ data() {
     axios.put('/api/gui/subscriber/'+el.id,JSON.stringify({"is_internal_call_allowed":el.is_internal_call_allowed}));
     axios.put('/api/gui/subscriber/'+el.id,JSON.stringify({"is_internal_sms_allowed":el.is_internal_sms_allowed}));
 
+
   },
   },
   mounted() {
@@ -174,25 +178,84 @@ data() {
     if (active.subs_active == 'yes') {
     if (mes.type == 'subscriber_updated') {
 
-    this.input.data[parseInt(mes.body.id)-1] = mes.body;
+    for (var i = 0; i < this.input.data2.length; i++ ) {
+        if (this.input.data2[i].id == mes.body.id) {
+            this.input.data2[i] = mes.body;
+            break;
+        }
+    }
 
+    /*new Vue({
+    render: h => h(subscribers)
+    }).$mount('#app3')
+    EventBus.$emit('data', this.input.data);
+    EventBus.$emit('data2', this.input.data2);*/
+    }
+    else if (mes.type == 'cell_updated') {
+
+    for (var i = 0; i < this.input.data.length; i++ ) {
+        if (this.input.data[i].id == mes.body.id) {
+            this.input.data[i] = mes.body;
+            break;
+        }
+    }
+
+
+    }
+
+    else if (mes.type == 'subscriber_inserted') {
+
+    var found = false;
+    for (var i = 0; i < this.input.data2.length; i++ ) {
+        if (this.input.data2[i].id == mes.body.id) {
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+      this.input.data2.push(mes.body);
+    }
     new Vue({
     render: h => h(subscribers)
     }).$mount('#app3')
+    EventBus.$emit('data', this.input.data);
+    EventBus.$emit('data2', this.input.data2);
 
     }
+    else if (mes.type == 'subscriber_deleted') {
+
+    for (var i = 0; i < this.input.data2.length; i++ ) {
+        if (this.input.data2[i].id == mes.body.id) {
+            this.input.data2.splice(i, 1);
+            break;
+        }
+    }
+    /*new Vue({
+    render: h => h(subscribers)
+    }).$mount('#app3')
+    EventBus.$emit('data', this.input.data);
+    EventBus.$emit('data2', this.input.data2);*/
+    }
+    new Vue({
+    render: h => h(subscribers)
+    }).$mount('#app3')
+    EventBus.$emit('data', this.input.data);
+    EventBus.$emit('data2', this.input.data2);
     }
   });
 
   },
   created() {
-  axios.get('/api/gui/subscriber').then(response => {
-     this.input.data2 = response.data;
-     });
-
+  EventBus.$on('data', d => {
+  this.input.data = d;
+  });
+  EventBus.$on('data2', d2 => {
+  this.input.data2 = d2;
+  });
 
   },
   }
+
 
 </script>
 

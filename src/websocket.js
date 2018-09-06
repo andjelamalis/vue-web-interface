@@ -12,7 +12,7 @@ const emitter = new vue({
 })
 
 ws.onmessage =  function(m) {
-      emitter.$emit('message', JSON.parse(m.data));
+    emitter.$emit('message', JSON.parse(m.data));
   }
 
   ws.onerror = function(err){
