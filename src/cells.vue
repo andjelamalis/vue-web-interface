@@ -172,11 +172,7 @@ data() {
           break;
       }
   }
-  new Vue({
-  render: h => h(cells)
-  }).$mount('#app2');
-  EventBus.$emit('data', this.input.data);
-  EventBus.$emit('data2', this.input.data2);
+
 
   }
   else if (mes.type == 'subscriber_updated') {
@@ -199,11 +195,6 @@ data() {
   if (!found) {
     this.input.data2.push(mes.body);
   }
-  new Vue({
-  render: h => h(subscribers)
-  }).$mount('#app3')
-  EventBus.$emit('data', this.input.data);
-  EventBus.$emit('data2', this.input.data2);
 
   }
   else if (mes.type == 'subscriber_deleted') {
@@ -216,6 +207,7 @@ data() {
   }
 
 }
+this.$forceUpdate();
 }
 })
 

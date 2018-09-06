@@ -162,6 +162,7 @@ data() {
 
     axios.put('/api/gui/subscriber/'+el.id,JSON.stringify({"imsi":el.imsi, "imei":el.imei, "number":el.number, "person_id":el.person_id, "is_external_call_allowed":el.is_external_call_allowed, "is_external_sms_allowed":el.is_external_sms_allowed, "is_internal_call_allowed":el.is_internal_call_allowed, "is_internal_sms_allowed":el.is_internal_sms_allowed}));
 
+
   },
   },
   mounted() {
@@ -176,12 +177,6 @@ data() {
             break;
         }
     }
-
-    /*new Vue({
-    render: h => h(subscribers)
-    }).$mount('#app3')
-    EventBus.$emit('data', this.input.data);
-    EventBus.$emit('data2', this.input.data2);*/
     }
     else if (mes.type == 'cell_updated') {
 
@@ -207,11 +202,6 @@ data() {
     if (!found) {
       this.input.data2.push(mes.body);
     }
-    new Vue({
-    render: h => h(subscribers)
-    }).$mount('#app3')
-    EventBus.$emit('data', this.input.data);
-    EventBus.$emit('data2', this.input.data2);
 
     }
     else if (mes.type == 'subscriber_deleted') {
@@ -222,17 +212,8 @@ data() {
             break;
         }
     }
-    /*new Vue({
-    render: h => h(subscribers)
-    }).$mount('#app3')
-    EventBus.$emit('data', this.input.data);
-    EventBus.$emit('data2', this.input.data2);*/
     }
-    new Vue({
-    render: h => h(subscribers)
-    }).$mount('#app3')
-    EventBus.$emit('data', this.input.data);
-    EventBus.$emit('data2', this.input.data2);
+    this.$forceUpdate();
     }
   });
 
