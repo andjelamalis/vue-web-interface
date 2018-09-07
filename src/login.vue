@@ -22,6 +22,7 @@ import { EventBus } from './event-bus.js'
 import Vue from 'vue'
 import axios from 'axios'
 import ws from './websocket'
+import data from './data.js'
 
 
 export default {
@@ -61,11 +62,14 @@ export default {
 
     });
       axios.get('/api/gui/cell').then(response => {
-         this.input.data = response.data;
+         data.cellsData = response.data;
     });
-    axios.get('/api/gui/subscriber').then(response => {
-       this.input.data2 = response.data;
+     axios.get('/api/gui/subscriber').then(response => {
+         data.subscribersData = response.data;
        });
+       axios.get('/api/gui/person').then(response => {
+           data.personData = response.data;
+         });
 
   }
   }

@@ -1,4 +1,5 @@
 import vue from 'vue'
+import data from './data.js'
 
 const ws = new WebSocket('ws://' + location.host + '/ws/api/gui')
 
@@ -11,25 +12,76 @@ const emitter = new vue({
   }
 })
 
-ws.onmessage =  function(m) {
-/*  if (m.type == 'cell_updated') {
-
+ws.onmessage =  function(message) {
+  var m = JSON.parse(message.data);
+  if (m.type == 'cell_updated') {
+    for (var i = 0; i < data.cellsData.length; i++ ) {
+        if (data.cellsData[i].id == m.body.id) {
+            data.cellsData[i] = m.body;
+            break;
+        }
+    }
   }
   else if (m.type == 'subscriber_updated') {
-
+    for (var j = 0; j < data.subscribersData.length; j++ ) {
+        if (data.subscribersData[j].id == m.body.id) {
+            data.subscribersData[j] = m.body;
+            break;
+        }
+    }
   }
 
   else if (m.type == 'subscriber_inserted') {
-
-
+    var found = false;
+    for (var k = 0; k < data.subscribersData.length; k++ ) {
+        if (data.subscribersData[k].id == m.body.id) {
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+      data.subscribersData.push(m.body)
+    }
   }
   else if (m.type == 'subscriber_deleted') {
-
-
+    for (var l = 0; l < data.subscribersData.length; l++ ) {
+        if (data.subscribersData[l].id == m.body.id) {
+            data.subscribersData.splice(l, 1);
+            break;
+        }
+    }
   }
-*/
-    emitter.$emit('message', JSON.parse(m.data));
+  else if (m.type == 'person_updated') {
+    for (var p = 0; p < data.personData.length; p++ ) {
+        if (data.personData[p].id == m.body.id) {
+            data.personData[p] = m.body;
+            break;
+        }
+    }
   }
+  else if (m.type == 'person_inserted') {
+    var found1 = false;
+    for (var n = 0; n < data.personData.length; n++ ) {
+        if (data.personData[n].id == m.body.id) {
+            found1 = true;
+            break;
+        }
+    }
+    if (!found1) {
+      data.personData.push(m.body)
+    }
+  }
+  else if (m.type == 'person_deleted') {
+    for (var o = 0; o < data.personData.length; o++ ) {
+        if (data.personData[o].id == m.body.id) {
+            data.personData.splice(o, 1);
+            break;
+        }
+    }
+  }
+
+  emitter.$emit('message', '');
+}
 
   ws.onerror = function(err){
     emitter.$emit("error", err)

@@ -6,9 +6,14 @@
   <br>
   <br>
   <br>
-  <br>
-  <button v-on:click="cells()" style="background-color: white; color: black; border: 2px solid #A9A9A9; float: left; font-size: 16px;"> Cells </button>
-  <button v-on:click="subscribers()" style="background-color: white; color: black; border: 2px solid #D3D3D3; float: left; font-size: 16px;"> Subscribers </button>
+
+  <select v-model="input.selected" style="width: 150px; float:left; font-size: 17px" v-on:change="onChange()">
+  <option value="cells">cells</option>
+  <option value="subscribers">subscribers</option>
+  <option value="person">person</option>
+  </select>
+
+
   <div class="container">
   <br>
   <br>
@@ -23,7 +28,6 @@
   <br>
 
   <table v-for="(el, i) in this.input.data" v-bind:key="i" style="float: left">
-
   <tr>
     <th colspan="2"> cell{{el.id}} </th>
    </tr>
@@ -61,11 +65,11 @@
 </select> </td>
    </tr>
    <tr>
-     <td colspan="2"> <label> Status: {{el.required_status}} </label> &nbsp; <button v-on:click="OnOff(el)"> Change status </button> &nbsp; <button v-on:click="update(el)"> Update </button> </td>
+     <td colspan="2"> <label> Status: {{el.required_status}} </label> &nbsp; <button v-on:click="OnOff(el)"> Change status </button> &nbsp; <button v-on:click="updateCell(el)"> Update </button> </td>
     </tr>
+</table>
 
 
-  </table>
 
 
   </div>
@@ -79,7 +83,7 @@ import login from './login.vue'
 import cells from './cells.vue'
 import subscribers from './subscribers.vue'
 import ws from './websocket'
-import active from './actives.js'
+import data from './data.js'
 
 
 export default {
@@ -91,7 +95,7 @@ data() {
     input: {
     data: [],
     data2: [],
-    message: ' ',
+    selected: 'cells',
     dataUpdate: [],
     ws: ''
     }
@@ -99,107 +103,50 @@ data() {
 
   },
   methods: {
-  update: function(el) {
-
-
+  updateCell: function(el) {
   axios.put('/api/gui/cell/'+el.id,JSON.stringify({"el.cell_profile_id":parseInt(el.channel_number), "channel_number":parseInt(el.channel_number), "min_attenuation":parseInt(el.min_attenuation), "power":parseInt(el.power), "power_type":el.power_type, "accept_mode":el.accept_mode}));
-
-
   },
+
+  UpdateSubscriber: function(el) {
+    axios.put('/api/gui/subscriber/'+el.id,JSON.stringify({"imsi":el.imsi, "imei":el.imei, "number":el.number, "person_id":el.person_id, "is_external_call_allowed":el.is_external_call_allowed, "is_external_sms_allowed":el.is_external_sms_allowed, "is_internal_call_allowed":el.is_internal_call_allowed, "is_internal_sms_allowed":el.is_internal_sms_allowed}));
+  },
+
   OnOff: function(el) {
     axios.post('/api/gui/cell/'+el.id+'/power/'+ (el.required_status === 'on' ? 'off/' : 'on/'));
-  },
-  cells: function() {
-
   },
   logout: function() {
     window.localStorage.setItem('test', '');
     new Vue({
       render: h => h(login)
     }).$mount('#app2');
-
-
-
   },
-  subscribers: function() {
-  active.cells_active = 'no';
-  active.subs_active = 'yes';
 
-  new Vue({
-  render: h => h(subscribers)
-  }).$mount('#app2')
-  EventBus.$emit('data', this.input.data);
-  EventBus.$emit('data2', this.input.data2);
-
-
+  onChange: function() {
+  if (this.input.selected == 'cells') {
+    this.input.data = data.cellsData;
   }
-
+  else if (this.input.selected == 'person') {
+    this.input.data = data.personData;
+  }
+  else if (this.input.selected == 'subscribers') {
+    this.input.data = data.subscribersData;
+  }
+  this.$forceUpdate();
+  },
   },
   mounted() {
   ws.$on('message', mes => {
-  this.input.message = mes
-   if (active.cells_active == 'yes') {
-  if (mes.type == 'cell_updated') {
-
-  for (var i = 0; i < this.input.data.length; i++ ) {
-      if (this.input.data[i].id == mes.body.id) {
-          this.input.data[i] = mes.body;
-          break;
-      }
-  }
-
-
-  }
-  else if (mes.type == 'subscriber_updated') {
-  for (var i = 0; i < this.input.data2.length; i++ ) {
-      if (this.input.data2[i].id == mes.body.id) {
-          this.input.data2[i] = mes.body;
-          break;
-      }
-  }
-  }
-  else if (mes.type == 'subscriber_inserted') {
-
-  var found = false;
-  for (var i = 0; i < this.input.data2.length; i++ ) {
-      if (this.input.data2[i].id == mes.body.id) {
-          found = true;
-          break;
-      }
-  }
-  if (!found) {
-    this.input.data2.push(mes.body);
-  }
-
-  }
-  else if (mes.type == 'subscriber_deleted') {
-
-  for (var i = 0; i < this.input.data2.length; i++ ) {
-      if (this.input.data2[i].id == mes.body.id) {
-          this.input.data2.splice(i, 1);
-          break;
-      }
-  }
-
-}
-
-}
-})
-
-
-
-
-
+  this.$forceUpdate();
+  })
 
   },
   created() {
-  EventBus.$on('data', d => {
-  this.input.data = d;
+  this.input.data = data.cellsData;
+  if (this.input.data.length == 0) {
+  axios.get('/api/gui/cell').then(response => {
+       this.input.data = response.data
   });
-  EventBus.$on('data2', d2 => {
-  this.input.data2 = d2;
-  });
-
+  }
   },
 
 

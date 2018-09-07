@@ -14,16 +14,16 @@
   <br>
   <table>
     <tr>
-    <th  v-for="(columns, j) in this.input.data2[0]" v-bind:key="j"> <p>{{j}} </p></th>
+    <th  v-for="(columns, j) in this.input.data[0]" v-bind:key="j"> <p>{{j}} </p></th>
     </tr>
-    <tr  v-for="(elements, i) in this.input.data2" v-bind:key="i">
+    <tr  v-for="(elements, i) in this.input.data" v-bind:key="i">
     <td  v-for="(columns, j) in elements" v-bind:key="j"> <p>{{columns}} </p></td>
     </tr>
 </table>
 
 <br>
 
-<table v-for="(el, i) in this.input.data2" v-bind:key="i" style="float: left">
+<table v-for="(el, i) in this.input.data" v-bind:key="i" style="float: left">
 <tr>
   <th colspan="2"> {{el.imsi}} </th>
  </tr>
@@ -63,7 +63,8 @@ import login from './login.vue'
 import cells from './cells.vue'
 import subscribers from './subscribers.vue'
 import ws from './websocket.js'
-import active from './actives.js'
+
+import data from './data.js'
 
 
 
@@ -91,8 +92,6 @@ data() {
   new Vue({
   render: h => h(cells)
   }).$mount('#app3')
-  EventBus.$emit('data', this.input.data);
-  EventBus.$emit('data2', this.input.data2);
 
   },
   subscribers: function() {
@@ -114,64 +113,13 @@ data() {
   mounted() {
 
   ws.$on('message', mes => {
-    if (active.subs_active == 'yes') {
-    if (mes.type == 'subscriber_updated') {
-
-    for (var i = 0; i < this.input.data2.length; i++ ) {
-        if (this.input.data2[i].id == mes.body.id) {
-            this.input.data2[i] = mes.body;
-            break;
-        }
-    }
-    }
-    else if (mes.type == 'cell_updated') {
-
-    for (var i = 0; i < this.input.data.length; i++ ) {
-        if (this.input.data[i].id == mes.body.id) {
-            this.input.data[i] = mes.body;
-            break;
-        }
-    }
-
-
-    }
-
-    else if (mes.type == 'subscriber_inserted') {
-
-    var found = false;
-    for (var i = 0; i < this.input.data2.length; i++ ) {
-        if (this.input.data2[i].id == mes.body.id) {
-            found = true;
-            break;
-        }
-    }
-    if (!found) {
-      this.input.data2.push(mes.body);
-    }
-
-    }
-    else if (mes.type == 'subscriber_deleted') {
-
-    for (var i = 0; i < this.input.data2.length; i++ ) {
-        if (this.input.data2[i].id == mes.body.id) {
-            this.input.data2.splice(i, 1);
-            break;
-        }
-    }
-    }
-    this.$forceUpdate();
-    }
-  });
-
+  this.$forceUpdate();
+  })
   },
-  created() {
-  EventBus.$on('data', d => {
-  this.input.data = d;
-  });
-  EventBus.$on('data2', d2 => {
-  this.input.data2 = d2;
-  });
 
+  created() {
+  this.input.data = data.subscribersData;
+  console.log(this.input.data);
   },
   }
 
