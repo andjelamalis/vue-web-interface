@@ -12,8 +12,6 @@
   <option value="subscribers">subscribers</option>
   <option value="person">person</option>
   </select>
-
-
   <div class="container">
   <br>
   <br>
@@ -27,6 +25,8 @@
 
   <br>
 
+  </div>
+  <div v-if="input.selected == 'cells'">
   <table v-for="(el, i) in this.input.data" v-bind:key="i" style="float: left">
   <tr>
     <th colspan="2"> cell{{el.id}} </th>
@@ -68,20 +68,50 @@
      <td colspan="2"> <label> Status: {{el.required_status}} </label> &nbsp; <button v-on:click="OnOff(el)"> Change status </button> &nbsp; <button v-on:click="updateCell(el)"> Update </button> </td>
     </tr>
 </table>
+  </div>
 
+  <div v-if="input.selected == 'subscribers'">
 
+  <table v-for="(el, i) in this.input.data" v-bind:key="i" style="float: left">
+  <tr>
+    <th colspan="2"> {{el.imsi}} </th>
+   </tr>
+   <tr>
+    <td> IMSI: </td>
+    <td> <input v-model="el.imsi">  </td>
+   </tr>
+   <tr>
+    <td> IMEI: </td>
+    <td> <input v-model="el.imei">  </td>
+   </tr>
+   <tr>
+    <td> Number: </td>
+    <td> <input v-model="el.number">  </td>
+   </tr>
+   <tr>
+      <td> Person: </td>
+      <td> <input v-model="el.person_id"> </td>
+   </tr>
+   <tr rowspan="2">
+     <td colspan="2"> <input type="checkbox" v-model="el.is_external_call_allowed"> External call <input type="checkbox" v-model="el.is_external_sms_allowed">  External sms <br> <input type="checkbox" v-model="el.is_internal_call_allowed"> Internal call <input type="checkbox" v-model="el.is_internal_sms_allowed">  Internal sms </td>
 
+    </tr>
+    <tr>
+      <td colspan="2"> <button v-on:click="update_subscriber(el)"> Update </button> </td>
+    </tr>
+  </table>
 
   </div>
   </div>
+
+
 </template>
 <script>
 import Vue from 'vue'
 import axios from 'axios'
 import { EventBus } from './event-bus.js'
 import login from './login.vue'
-import cells from './cells.vue'
-import subscribers from './subscribers.vue'
+import tables from './tables.vue'
 import ws from './websocket'
 import data from './data.js'
 
@@ -136,6 +166,15 @@ data() {
   },
   mounted() {
   ws.$on('message', mes => {
+  if (this.input.selected == 'cells') {
+    this.input.data = data.cellsData;
+  }
+  else if (this.input.selected == 'person') {
+    this.input.data = data.personData;
+  }
+  else if (this.input.selected == 'subscribers') {
+    this.input.data = data.subscribersData;
+  }
   this.$forceUpdate();
   })
 
@@ -175,7 +214,6 @@ table, th, td {
 
 select {
   width: 100%;
-
 }
 
 </style>

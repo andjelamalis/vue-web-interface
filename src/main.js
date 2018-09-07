@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import login from './login.vue'
-import cells from './cells.vue'
+import tables from './tables.vue'
 import axios from 'axios'
 //import { EventBus } from './event-bus'
 import data from './data.js'
@@ -20,7 +20,7 @@ if (window.localStorage.getItem('test') != null) {
          data.personData = response.data
     });
     new Vue({
-      render: h => h(cells)
+      render: h => h(tables)
     }).$mount('#app')
   }
   else {
