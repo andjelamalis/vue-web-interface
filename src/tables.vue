@@ -97,11 +97,43 @@
 
     </tr>
     <tr>
-      <td colspan="2"> <button v-on:click="update_subscriber(el)"> Update </button> </td>
+      <td colspan="2"> <button v-on:click="updateSubscriber(el)"> Update </button> </td>
     </tr>
   </table>
 
   </div>
+
+  <div v-if="input.selected == 'person'">
+  <table v-for="(el, i) in this.input.data" v-bind:key="i" style="float: left">
+  <tr>
+    <th colspan="2"> {{el.first_name}} </th>
+   </tr>
+   <tr>
+    <td> First name: </td>
+    <td> <input v-model="el.first_name">  </td>
+   </tr>
+   <tr>
+    <td> Last name: </td>
+    <td> <input v-model="el.last_name">  </td>
+   </tr>
+   <tr>
+    <td> Father name: </td>
+    <td> <input v-model="el.father_name">  </td>
+   </tr>
+   <tr>
+      <td> Group: </td>
+      <td> <input v-model="el.person_group_id"> </td>
+   </tr>
+   <tr rowspan="2">
+     <td colspan="2"> <input type="checkbox" v-model="el.is_external_call_allowed"> External call <input type="checkbox" v-model="el.is_external_sms_allowed">  External sms <br> <input type="checkbox" v-model="el.is_internal_call_allowed"> Internal call <input type="checkbox" v-model="el.is_internal_sms_allowed">  Internal sms </td>
+
+    </tr>
+    <tr>
+      <td colspan="2"> <button v-on:click="updatePerson(el)"> Update </button> </td>
+    </tr>
+  </table>
+  </div>
+
   </div>
 
 
@@ -137,7 +169,7 @@ data() {
   axios.put('/api/gui/cell/'+el.id,JSON.stringify({"el.cell_profile_id":parseInt(el.channel_number), "channel_number":parseInt(el.channel_number), "min_attenuation":parseInt(el.min_attenuation), "power":parseInt(el.power), "power_type":el.power_type, "accept_mode":el.accept_mode}));
   },
 
-  UpdateSubscriber: function(el) {
+  updateSubscriber: function(el) {
     axios.put('/api/gui/subscriber/'+el.id,JSON.stringify({"imsi":el.imsi, "imei":el.imei, "number":el.number, "person_id":el.person_id, "is_external_call_allowed":el.is_external_call_allowed, "is_external_sms_allowed":el.is_external_sms_allowed, "is_internal_call_allowed":el.is_internal_call_allowed, "is_internal_sms_allowed":el.is_internal_sms_allowed}));
   },
 
@@ -163,6 +195,10 @@ data() {
   }
   this.$forceUpdate();
   },
+  updatePerson: function(el) {
+  axios.put('/api/gui/person/'+el.id,JSON.stringify({"first_name":el.first_name, "last_name":el.last_name, "father_name":el.father_name, "person_group_id":parseInt(el.person_group_id), "is_external_call_allowed":el.is_external_call_allowed, "is_external_sms_allowed":el.is_external_sms_allowed, "is_internal_call_allowed":el.is_internal_call_allowed, "is_internal_sms_allowed":el.is_internal_sms_allowed}));
+
+  }
   },
   mounted() {
   ws.$on('message', mes => {
