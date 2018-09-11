@@ -2,14 +2,13 @@ import Vue from 'vue'
 import login from './login.vue'
 import tables from './tables.vue'
 import axios from 'axios'
-//import { EventBus } from './event-bus'
 import data from './data.js'
 
 
 Vue.config.productionTip = false
 
-if (window.localStorage.getItem('test') != null) {
-  if ((window.localStorage.getItem('test').length > 0)) {
+if (window.localStorage.getItem('cookie') != null) {
+  if ((window.localStorage.getItem('cookie').length > 0)) {
     axios.get('/api/gui/cell').then(response => {
          data.cellsData = response.data
     });

@@ -35,7 +35,6 @@ export default {
       user: '',
       pass: '',
       data: [],
-      data2: [],
       ws: ''
       }
     }
@@ -48,13 +47,11 @@ export default {
       axios.post('/api/gui/login', {user: this.input.user, password: this.input.pass}).then(response => {
 
          const t = JSON.stringify(response.headers);
-         window.localStorage.setItem('test', t);
+         window.localStorage.setItem('cookie', t);
 
          new Vue({
          render: h => h(tables)
          }).$mount('#app')
-         EventBus.$emit('data', this.input.data);
-         EventBus.$emit('data2', this.input.data2);
 
     })
     .catch(error => {

@@ -156,9 +156,7 @@ data() {
 
     input: {
     data: [],
-    data2: [],
     selected: 'cells',
-    dataUpdate: [],
     ws: ''
     }
   }
@@ -177,22 +175,14 @@ data() {
     axios.post('/api/gui/cell/'+el.id+'/power/'+ (el.required_status === 'on' ? 'off/' : 'on/'));
   },
   logout: function() {
-    window.localStorage.setItem('test', '');
+    window.localStorage.setItem('cookie', '');
     new Vue({
       render: h => h(login)
     }).$mount('#app2');
   },
 
   onChange: function() {
-  if (this.input.selected == 'cells') {
-    this.input.data = data.cellsData;
-  }
-  else if (this.input.selected == 'person') {
-    this.input.data = data.personData;
-  }
-  else if (this.input.selected == 'subscribers') {
-    this.input.data = data.subscribersData;
-  }
+  this.input.data = data[this.input.selected + 'Data'];
   this.$forceUpdate();
   },
   updatePerson: function(el) {
@@ -202,15 +192,7 @@ data() {
   },
   mounted() {
   ws.$on('message', mes => {
-  if (this.input.selected == 'cells') {
-    this.input.data = data.cellsData;
-  }
-  else if (this.input.selected == 'person') {
-    this.input.data = data.personData;
-  }
-  else if (this.input.selected == 'subscribers') {
-    this.input.data = data.subscribersData;
-  }
+  this.input.data = data[this.input.selected + 'Data'];
   this.$forceUpdate();
   })
 
@@ -223,8 +205,6 @@ data() {
   });
   }
   },
-
-
   }
 
 
