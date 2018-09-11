@@ -10,7 +10,7 @@
   <select v-model="input.selected" style="width: 150px; float:left; font-size: 17px" v-on:change="onChange()">
   <option value="cells">cells</option>
   <option value="subscribers">subscribers</option>
-  <option value="person">person</option>
+  <option value="profiles">profiles</option>
   </select>
   <div class="container">
   <br>
@@ -32,8 +32,12 @@
     <th colspan="2"> cell{{el.id}} </th>
    </tr>
    <tr>
-    <td> Cell profile id: </td>
-    <td> <input v-model="el.cell_profile_id">  </td>
+   <td> Profile: </td>
+   <td> <select v-model="el.cell_profile_id">
+        <option value=""> </option>
+        <option v-for="(name, a) in input.profile" v-bind:key="a">{{name.id}}</option>
+        </select>
+   </td>
    </tr>
    <tr>
     <td> Chanel number: </td>
@@ -103,33 +107,43 @@
 
   </div>
 
-  <div v-if="input.selected == 'person'">
+  <div v-if="input.selected == 'profiles'">
   <table v-for="(el, i) in this.input.data" v-bind:key="i" style="float: left">
   <tr>
-    <th colspan="2"> {{el.first_name}} </th>
+    <th colspan="2"> {{el.id}} </th>
    </tr>
    <tr>
-    <td> First name: </td>
-    <td> <input v-model="el.first_name">  </td>
+    <td> Standard: </td>
+    <td> <select v-model="el.standard">
+  <option value="850">850</option>
+  <option value="900">900</option>
+  <option value="1800">1800</option>
+  <option value="1900">1900</option>
+</select>
+</td>
    </tr>
    <tr>
-    <td> Last name: </td>
-    <td> <input v-model="el.last_name">  </td>
+    <td> ARFCN: </td>
+    <td> <input v-model="el.arfcn">  </td>
    </tr>
    <tr>
-    <td> Father name: </td>
-    <td> <input v-model="el.father_name">  </td>
+    <td> MCC: </td>
+    <td> <input v-model="el.mcc">  </td>
    </tr>
    <tr>
-      <td> Group: </td>
-      <td> <input v-model="el.person_group_id"> </td>
+      <td> MNC: </td>
+      <td> <input v-model="el.mnc"> </td>
    </tr>
-   <tr rowspan="2">
-     <td colspan="2"> <input type="checkbox" v-model="el.is_external_call_allowed"> External call <input type="checkbox" v-model="el.is_external_sms_allowed">  External sms <br> <input type="checkbox" v-model="el.is_internal_call_allowed"> Internal call <input type="checkbox" v-model="el.is_internal_sms_allowed">  Internal sms </td>
-
-    </tr>
+   <tr>
+   <td> Network name: </td>
+   <td> <input v-model="el.network_name"> </td>
+   </tr>
+   <tr>
+   <td> Name: </td>
+   <td>  <input v-model="el.name"></td>
+   </tr>
     <tr>
-      <td colspan="2"> <button v-on:click="updatePerson(el)"> Update </button> </td>
+      <td colspan="2"> <button v-on:click="updateProfiles(el)"> Update </button> </td>
     </tr>
   </table>
   </div>
@@ -156,6 +170,7 @@ data() {
     input: {
     data: [],
     selected: 'cells',
+    profile: [],
     ws: ''
     }
   }
@@ -163,7 +178,7 @@ data() {
   },
   methods: {
   updateCell: function(el) {
-  axios.put('/api/gui/cell/'+el.id,JSON.stringify({"el.cell_profile_id":parseInt(el.channel_number), "channel_number":parseInt(el.channel_number), "min_attenuation":parseInt(el.min_attenuation), "power":parseInt(el.power), "power_type":el.power_type, "accept_mode":el.accept_mode}));
+  axios.put('/api/gui/cell/'+el.id,JSON.stringify({"cell_profile_id":parseInt(el.cell_profile_id), "channel_number":parseInt(el.channel_number), "min_attenuation":parseInt(el.min_attenuation), "power":parseInt(el.power), "power_type":el.power_type, "accept_mode":el.accept_mode}));
   },
 
   updateSubscriber: function(el) {
@@ -184,23 +199,30 @@ data() {
   this.input.data = data[this.input.selected + 'Data'];
   this.$forceUpdate();
   },
-  updatePerson: function(el) {
-  axios.put('/api/gui/person/'+el.id,JSON.stringify({"first_name":el.first_name, "last_name":el.last_name, "father_name":el.father_name, "person_group_id":parseInt(el.person_group_id), "is_external_call_allowed":el.is_external_call_allowed, "is_external_sms_allowed":el.is_external_sms_allowed, "is_internal_call_allowed":el.is_internal_call_allowed, "is_internal_sms_allowed":el.is_internal_sms_allowed}));
+  updateProfiles: function(el) {
+  axios.put('/api/gui/cell_profile/'+el.id,JSON.stringify({"standard":el.standard, "arfcn":el.arfcn, "mcc":el.mcc, "mnc":el.mnc, "network_name":el.network_name, "name":el.name}));
 
   }
   },
   mounted() {
   ws.$on('message', mes => {
   this.input.data = data[this.input.selected + 'Data'];
+  this.input.profile = data.profilesData;
   this.$forceUpdate();
   })
 
   },
   created() {
   this.input.data = data.cellsData;
+  this.input.profile = data.profilesData;
   if (this.input.data.length == 0) {
   axios.get('/api/gui/cell').then(response => {
        this.input.data = response.data
+  });
+  }
+  if (this.input.profile.length == 0) {
+  axios.get('/api/gui/cell_profile').then(response => {
+       this.input.profile = response.data
   });
   }
   },

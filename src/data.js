@@ -1,4 +1,4 @@
 var cellsData = [];
 var subscribersData = [];
-var personData = [];
-export default { cellsData, subscribersData, personData }
+var profilesData = [];
+export default { cellsData, subscribersData, profilesData }

@@ -51,30 +51,30 @@ ws.onmessage =  function(message) {
         }
     }
   }
-  else if (m.type == 'person_updated') {
-    for (var p = 0; p < data.personData.length; p++ ) {
-        if (data.personData[p].id == m.body.id) {
-            data.personData[p] = m.body;
+  else if (m.type == 'cell_profile_updated') {
+    for (var p = 0; p < data.profilesData.length; p++ ) {
+        if (data.profilesData[p].id == m.body.id) {
+            data.profilesData[p] = m.body;
             break;
         }
     }
   }
-  else if (m.type == 'person_inserted') {
+  else if (m.type == 'cell_profile_inserted') {
     var found1 = false;
-    for (var n = 0; n < data.personData.length; n++ ) {
-        if (data.personData[n].id == m.body.id) {
+    for (var n = 0; n < data.profilesData.length; n++ ) {
+        if (data.profilesData[n].id == m.body.id) {
             found1 = true;
             break;
         }
     }
     if (!found1) {
-      data.personData.push(m.body)
+      data.profilesData.push(m.body)
     }
   }
-  else if (m.type == 'person_deleted') {
-    for (var o = 0; o < data.personData.length; o++ ) {
-        if (data.personData[o].id == m.body.id) {
-            data.personData.splice(o, 1);
+  else if (m.type == 'cell_profile_deleted') {
+    for (var o = 0; o < data.profilesData.length; o++ ) {
+        if (data.profilesData[o].id == m.body.id) {
+            data.profilesData.splice(o, 1);
             break;
         }
     }

@@ -63,8 +63,8 @@ export default {
      axios.get('/api/gui/subscriber').then(response => {
          data.subscribersData = response.data;
        });
-       axios.get('/api/gui/person').then(response => {
-           data.personData = response.data;
+       axios.get('/api/gui/cell_profile').then(response => {
+           data.profilesData = response.data;
          });
 
   }
