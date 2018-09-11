@@ -18,7 +18,6 @@
 </template>
 <script>
 import tables from './tables.vue'
-import { EventBus } from './event-bus.js'
 import Vue from 'vue'
 import axios from 'axios'
 import ws from './websocket'

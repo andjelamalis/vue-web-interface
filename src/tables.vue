@@ -141,7 +141,6 @@
 <script>
 import Vue from 'vue'
 import axios from 'axios'
-import { EventBus } from './event-bus.js'
 import login from './login.vue'
 import tables from './tables.vue'
 import ws from './websocket'
